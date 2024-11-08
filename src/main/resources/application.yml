@@ -10,6 +10,10 @@ spring:
         name: "%APP_BUILD_OS_NAME%"
         version: "%APP_BUILD_OS_VERSION%"
 
+influxdb:
+  bucket: device-data
+  org: hlaeja_ltd
+
 ---
 ###############################
 ### Development environment ###
@@ -19,6 +23,10 @@ spring:
     activate:
       on-profile: development
 
+influxdb:
+  token: %INFLUXDB_TOKEN%
+  url: http://localhost:8086
+
 ---
 ##########################
 ### Docker environment ###
@@ -27,6 +35,9 @@ spring:
   config:
     activate:
       on-profile: docker
+
+influxdb:
+  url: http://InfluxDB:8086
 
 ---
 ##############################
