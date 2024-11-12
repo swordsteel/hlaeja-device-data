@@ -1,0 +1,32 @@
+### add measurement for all
+POST {{hostname}}/client-00000000-0000-7000-0001-000000000001
+Content-Type: application/json
+
+{
+  "tags": {
+    "device": "00000000-0000-7000-0002-000000000001",
+    "node": "00000000-0000-7000-0003-000000000001"
+  },
+  "fields": {
+    "button0": 1,
+    "button1": 0,
+    "button2": 1
+  }
+}
+
+### add measurement for one
+POST {{hostname}}/client-00000000-0000-7000-0001-000000000001
+Content-Type: application/json
+
+{
+  "tags": {
+    "device": "00000000-0000-7000-0002-000000000001",
+    "node": "00000000-0000-7000-0003-000000000001"
+  },
+  "fields": {
+    "button1": 0
+  }
+}
+
+### add measurement
+GET {{hostname}}/client-00000000-0000-7000-0001-000000000001/node-00000000-0000-7000-0003-000000000001
