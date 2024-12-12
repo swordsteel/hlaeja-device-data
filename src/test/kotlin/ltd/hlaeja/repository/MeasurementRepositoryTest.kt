@@ -19,16 +19,15 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 
 class MeasurementRepositoryTest {
-
     private val client: InfluxDBClient = mockk()
     private val properties: InfluxDbProperties = mockk()
     private val writeApi: WriteApi = mockk()
     private val queryApi: QueryApi = mockk()
-
     private lateinit var repository: MeasurementRepository
 
     @BeforeEach
     fun setUp() {
+        every { client.makeWriteApi() } returns writeApi
         repository = MeasurementRepository(client, properties)
     }
 
@@ -36,8 +35,6 @@ class MeasurementRepositoryTest {
     fun `save point to influxdb`() = runTest {
         // given
         val point = Point.measurement("test").addField("value", 12.3)
-
-        every { client.makeWriteApi() } returns writeApi
         every { writeApi.writePoint(any()) } just Runs
 
         // when

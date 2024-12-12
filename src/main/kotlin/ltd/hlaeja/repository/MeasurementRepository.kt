@@ -15,6 +15,8 @@ class MeasurementRepository(
     private val properties: InfluxDbProperties,
 ) {
 
+    private val writeApi = influxDBClient.makeWriteApi()
+
     companion object {
         const val BY_NODE_QUERY: String = """
           from(bucket: "%s")
@@ -29,9 +31,7 @@ class MeasurementRepository(
 
     suspend fun save(
         point: Point,
-    ) = withContext(Dispatchers.IO) {
-        influxDBClient.makeWriteApi().writePoint(point)
-    }
+    ) = withContext(Dispatchers.IO) { writeApi.writePoint(point) }
 
     suspend fun getByNode(
         client: UUID,

@@ -4,9 +4,12 @@ import com.influxdb.client.write.Point
 import java.util.UUID
 import ltd.hlaeja.library.deviceData.MeasurementData
 import ltd.hlaeja.repository.MeasurementRepository
+import mu.KotlinLogging
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+
+private val log = KotlinLogging.logger {}
 
 @Service
 class MeasurementService(
@@ -19,7 +22,10 @@ class MeasurementService(
     ): MeasurementData.Response {
         val result = repository.getByNode(client, node)
         if (result.isEmpty()) {
-            throw ResponseStatusException(NOT_FOUND, "No data for client: $client, device: $node")
+            "No data for client: $client, node: $node".also {
+                log.warn { it }
+                throw ResponseStatusException(NOT_FOUND, it)
+            }
         }
         val latestData = mutableMapOf<String, Number>()
         result.forEach { table ->
@@ -27,6 +33,7 @@ class MeasurementService(
                 latestData[record.getValueByKey("_field") as String] = record.value as Number
             }
         }
+        log.info { "Load data for client $client" }
         return MeasurementData.Response(latestData)
     }
 
@@ -38,7 +45,10 @@ class MeasurementService(
             addTags(request.tags, point)
             addFields(request.fields, point)
         }
-        .let { point -> repository.save(point) }
+        .let { point ->
+            repository.save(point)
+            log.debug { "Save data for client $client" }
+        }
 
     private suspend fun addFields(
         measurements: Map<String, Number>,

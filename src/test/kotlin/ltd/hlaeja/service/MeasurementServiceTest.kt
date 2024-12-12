@@ -65,7 +65,7 @@ class MeasurementServiceTest {
         // then
         assertEquals(NOT_FOUND, exception.statusCode)
         assertEquals(
-            "No data for client: 00000000-0000-0000-0000-000000000000, device: 00000000-0000-0000-0000-000000000000",
+            "No data for client: 00000000-0000-0000-0000-000000000000, node: 00000000-0000-0000-0000-000000000000",
             exception.reason,
         )
     }
