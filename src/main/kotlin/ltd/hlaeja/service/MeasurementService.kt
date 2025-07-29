@@ -1,10 +1,10 @@
 package ltd.hlaeja.service
 
 import com.influxdb.client.write.Point
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.util.UUID
 import ltd.hlaeja.library.deviceData.MeasurementData
 import ltd.hlaeja.repository.MeasurementRepository
-import mu.KotlinLogging
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
