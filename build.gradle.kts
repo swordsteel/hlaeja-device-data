@@ -1,13 +1,12 @@
 import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
-import java.lang.System.getenv
 
 plugins {
-    alias(hlaeja.plugins.com.bmuschko.docker)
+    alias(hlaeja.plugins.gradle.docker)
     alias(hlaeja.plugins.kotlin.jvm)
     alias(hlaeja.plugins.kotlin.spring)
-    alias(hlaeja.plugins.ltd.hlaeja.plugin.service)
+    alias(hlaeja.plugins.spring.boot)
     alias(hlaeja.plugins.spring.dependency.management)
-    alias(hlaeja.plugins.springframework.boot)
+    alias(hlaeja.plugins.service)
 }
 
 dependencies {
@@ -15,7 +14,7 @@ dependencies {
     implementation(hlaeja.kotlin.logging)
     implementation(hlaeja.kotlin.reflect)
     implementation(hlaeja.kotlinx.coroutines)
-    implementation(hlaeja.library.hlaeja.common.messages)
+    implementation(hlaeja.library.common.messages)
     implementation(hlaeja.springboot.starter.actuator)
     implementation(hlaeja.springboot.starter.webflux)
 
@@ -30,11 +29,7 @@ dependencies {
 
 group = "ltd.hlaeja"
 
-fun influxDbToken(): String = if (extra.has("influxdb.token")) {
-    extra["influxdb.token"] as String
-} else {
-    getenv("INFLUXDB_TOKEN") ?: "missing_token"
-}
+fun influxDbToken(): String = config.findOrDefault("influxdb.token", "INFLUXDB_TOKEN", "missing_token")
 
 tasks {
     named("containerCreate", DockerCreateContainer::class) {
